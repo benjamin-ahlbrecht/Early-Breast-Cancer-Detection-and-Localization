@@ -161,7 +161,9 @@ cython_debug/
 
 
 # Dataset Patient ID data
-data/*.zip/
-data/train_images/[0-9]*/
-data/test_images/[0-9]*/
-data/train_images_processed/[0-9]*/
+data/*.zip
+data/train_images/*
+data/train_images_processed/*
+data/test_images/*
+
+!.gitkeep
