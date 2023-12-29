@@ -1,6 +1,9 @@
-matplotlib==3.8.2
-numpy==1.26.2
-pandas==2.1.4
-pydicom==2.4.4
+numpy
+pydicom
+pandas
 torch
 torchvision
+matplotlib
+
+--extra-index-url https://developer.download.nvidia.com/compute/redist
+nvidia-dali-cuda120
