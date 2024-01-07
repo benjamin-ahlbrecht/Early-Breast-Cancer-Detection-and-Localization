@@ -8,6 +8,15 @@ from torch.utils.data.sampler import WeightedRandomSampler
 
 from torchvision import transforms
 from processing import pipeline
+from typing import Tuple
+
+from processing import (
+    read_encoded_stream,
+    read_parameters,
+    process_torch
+)
+
+from nvidia.dali.plugin.pytorch import feed_ndarray
 
 
 class MammographyDataset(Dataset):
@@ -31,6 +40,7 @@ class MammographyDataset(Dataset):
             device (torch.device): The device to perform computations on
             augment (bool): Whether to perform data augmentations on the images
         """
+        self.device = device
         self.metadata = metadata
         self.augment = augment
         
@@ -120,7 +130,11 @@ class MammographyDataset(Dataset):
         image = output[0][0]
 
         # Convert image to PyTorch Tensor
-        image_torch = torch.empty(image.shape(), dtype=torch.float, device=DEVICE)
+        image_torch = torch.empty(
+            image.shape(),
+            dtype=torch.float,
+            device=self.device
+        )
         feed_ndarray(
             image,
             image_torch,
@@ -128,7 +142,7 @@ class MammographyDataset(Dataset):
         )
         
         # Preprocess the tensor
-        image_torch = process_torch(image_torch)
+        image_torch = process_torch(image_torch, self.device)
         return image_torch
     
     def process_image_cpu(self, fname:str) -> torch.Tensor:
@@ -151,7 +165,7 @@ class MammographyDataset(Dataset):
 
         image = torch.from_numpy(image)
         image = process_torch(image)
-        image = image.to(DEVICE)
+        image = image.to(self.device)
         return image
 
     def get_weighted_sampler(self, n_observations:int) -> WeightedRandomSampler:

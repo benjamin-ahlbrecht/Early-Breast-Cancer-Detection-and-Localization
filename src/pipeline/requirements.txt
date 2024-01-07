@@ -4,6 +4,7 @@ pandas
 torch
 torchvision
 matplotlib
+tqdm
 
 --extra-index-url https://developer.download.nvidia.com/compute/redist
 nvidia-dali-cuda120

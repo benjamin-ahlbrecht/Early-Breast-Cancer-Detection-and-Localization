@@ -1,8 +1,11 @@
 import torch
+import pydicom
+import numpy as np
 
 from torchvision.models import efficientnet_b4
-from typing import List
+from typing import List, Tuple
 from copy import deepcopy
+from tqdm.auto import tqdm
 
 
 def collater(
@@ -94,6 +97,8 @@ def train_model(
         optimizer,
         scheduler,
         early_stopper,
+        dataloader_train,
+        dataloader_val,
         device: torch.device,
         epochs: int = 10,
     ):
@@ -113,9 +118,9 @@ def train_model(
             train = phase == "train"
             model.train(train)
             if train:
-                dataloader = DATALOADER_TRAIN
+                dataloader = dataloader_train
             else:
-                dataloader = DATALOADER_VAL
+                dataloader = dataloader_val
             
             # Make classifications
             pbar_desc = f"(Epoch {epoch + 1}/{epochs}) ({phase.capitalize()})"

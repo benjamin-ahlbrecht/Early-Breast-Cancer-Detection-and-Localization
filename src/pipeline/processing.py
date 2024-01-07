@@ -161,7 +161,7 @@ def pipeline():
     return images
 
 
-def process_torch(image:torch.Tensor) -> torch.Tensor:
+def process_torch(image:torch.Tensor, device:torch.device) -> torch.Tensor:
     """Preprocess a torch tensor image
     
     Args:
@@ -185,7 +185,7 @@ def process_torch(image:torch.Tensor) -> torch.Tensor:
     
     image = image.unsqueeze(0)
     image = image.expand(3, -1, -1)
-    image = image.to(DEVICE)
+    image = image.to(device)
     return image
 
 
